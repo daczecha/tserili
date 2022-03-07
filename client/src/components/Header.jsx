@@ -23,6 +23,7 @@ function Header() {
       h="70px"
       w="100%"
       bg="#212121"
+      flexShrink="0"
     >
       <IconButton
         onClick={() => setSelectedChat('')}

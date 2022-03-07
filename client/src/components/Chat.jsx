@@ -1,6 +1,7 @@
 import { Badge, Box, Flex } from '@chakra-ui/react';
 import { ChatState } from '../Context/ChatProvider';
 import Header from './Header';
+import MessageBox from './MessageBox';
 
 function Chat() {
   const { selectedChat } = ChatState();
@@ -8,12 +9,15 @@ function Chat() {
     <>
       {selectedChat ? (
         <Box
-          d={{ base: selectedChat ? 'auto' : 'none', md: 'flex' }}
+          d={{ base: selectedChat ? 'flex' : 'none', md: 'flex' }}
           h="100%"
           flex="7"
           bg="#0f0f0f"
+          flexDir="column"
+          overflow="hidden"
         >
           <Header />
+          <MessageBox />
         </Box>
       ) : (
         <Flex
