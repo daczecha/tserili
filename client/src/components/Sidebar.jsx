@@ -36,8 +36,7 @@ function Sidebar() {
         justifyContent="space-between"
         w="100%"
         color="white"
-        p="15px"
-        pd="20px"
+        p="11px"
       >
         <IconButton
           _hover={{
@@ -66,15 +65,14 @@ function Sidebar() {
           color="white"
           borderRadius="50%"
           border="none"
+          boxShadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
           as={IconButton}
           aria-label="Options"
           icon={<Icon as={FaPen} />}
           variant="outline"
         />
         <MenuList
-          style={{
-            boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
-          }}
+          boxShadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
           border="none"
           bg="#222"
           color="white"

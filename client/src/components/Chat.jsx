@@ -17,7 +17,7 @@ function Chat() {
         </Box>
       ) : (
         <Flex
-          d={{ base: 'none' }}
+          d={{ base: 'none', md: 'flex' }}
           justifyContent="center"
           alignItems="center"
           h="100%"

@@ -1,5 +1,13 @@
 import { SearchIcon, ArrowBackIcon, Icon } from '@chakra-ui/icons';
-import { Flex, Text, Avatar, Heading, Box, IconButton } from '@chakra-ui/react';
+import {
+  Flex,
+  Text,
+  Avatar,
+  Heading,
+  Box,
+  IconButton,
+  useBreakpointValue,
+} from '@chakra-ui/react';
 
 import { FaEllipsisV } from 'react-icons/fa';
 import { ChatState } from '../Context/ChatProvider';
@@ -29,9 +37,19 @@ function Header() {
         icon={<ArrowBackIcon color="#ccc" fontSize="20px" />}
       />
       <Flex flex="1" cursor="pointer" alignItems="center">
-        <Avatar size="md" name="მარიამ კერესელიძე" src="" />
-        <Flex ml="15px" flexDir="column" justifyContent="center">
-          <Heading fontSize="md" font="bold">
+        <Avatar
+          width={{ base: '42px', sm: '48px' }}
+          height={{ base: '42px', sm: '48px' }}
+          size={useBreakpointValue({ base: 'sm', sm: 'md' })}
+          name="მარიამ კერესელიძე"
+          src=""
+        />
+        <Flex
+          ml={{ base: '8px', sm: '15px' }}
+          flexDir="column"
+          justifyContent="center"
+        >
+          <Heading fontSize="sm" font="bold">
             მარიამი
           </Heading>
           <Text fontSize="sm" color="#8774E1">
