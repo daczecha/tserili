@@ -16,14 +16,14 @@ function Header() {
   const { setSelectedChat } = ChatState();
   return (
     <Flex
-      pr="20px"
-      pl="20px"
+      p="10px 20px 10px 20px"
       alignItems="center"
       color="white"
-      h="70px"
       w="100%"
       bg="#212121"
       flexShrink="0"
+      boxShadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
+      zIndex="1"
     >
       <IconButton
         onClick={() => setSelectedChat('')}
@@ -39,8 +39,8 @@ function Header() {
       />
       <Flex flex="1" cursor="pointer" alignItems="center">
         <Avatar
-          width={{ base: '42px', sm: '48px' }}
-          height={{ base: '42px', sm: '48px' }}
+          width="42px"
+          height="42px"
           size={useBreakpointValue({ base: 'sm', sm: 'md' })}
           name="მარიამ კერესელიძე"
           src=""

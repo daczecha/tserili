@@ -1,31 +1,10 @@
+import { BsCheck2All } from 'react-icons/bs';
 import { Box, Flex, StackItem, Text } from '@chakra-ui/react';
+import { Icon } from '@chakra-ui/icons';
 import React from 'react';
 
-function Message({ received, lastMessage }) {
+function Message({ received }) {
   const bgColor = received ? '#212121' : '#816FD4';
-  let cornerStyle = {
-    content: '',
-    width: '0px',
-    height: '0px',
-    position: 'absolute',
-    borderBottom: `15px solid ${bgColor}`,
-    borderTop: '15px solid transparent',
-    bottom: '0px',
-    zIndex: '-1',
-  };
-  cornerStyle = received
-    ? {
-        ...cornerStyle,
-        borderRight: `15px solid ${bgColor}`,
-        borderLeft: '15px solid transparent',
-        left: '-10px',
-      }
-    : {
-        ...cornerStyle,
-        borderLeft: `15px solid ${bgColor}`,
-        borderRight: '15px solid transparent',
-        right: '-10px',
-      };
 
   return (
     <StackItem
@@ -34,26 +13,28 @@ function Message({ received, lastMessage }) {
       justifyContent={received ? 'flex-start' : 'flex-end'}
     >
       <Box
-        position="relative"
         bg={bgColor}
-        p="10px 10px 5px 10px"
+        p="5px 10px 5px 10px"
         color="white"
         borderRadius="xl"
         maxW="75%"
-        zIndex="1"
       >
-        {lastMessage && <div style={cornerStyle} />}
-        <Text fontSize="md">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Autem in
-          ducimus minima quae, ipsam dicta voluptates architecto. Distinctio at
-          nihil explicabo ipsa dicta suscipit mollitia? Sit consequatur
-          aspernatur explicabo? Odio.
+        <Text fontSize="md" pos="relative">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit
+          voluptate earum aliquam modi odit eius autem tenetur fugit minima
+          dolores? Consectetur sed fugiat, iste enim a labore voluptatem
+          veritatis distinctio!
+          <Flex
+            alignItems="center"
+            justifyContent="space-between"
+            float="right"
+          >
+            <Text mr="3px" userSelect="none" color="#ddd" fontSize="sm">
+              19:00
+            </Text>
+            {!received && <Icon color="#ddd" fontSize="lg" as={BsCheck2All} />}
+          </Flex>
         </Text>
-        <Flex justifyContent="flex-end">
-          <Text color="#ccc" fontSize="xs">
-            19:00 PM
-          </Text>
-        </Flex>
       </Box>
     </StackItem>
   );

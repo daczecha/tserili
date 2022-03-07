@@ -30,13 +30,15 @@ function Sidebar() {
       flex="3"
       w="300px"
       bg="#212121"
+      boxShadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
+      zIndex="1"
     >
       <Flex
         alignItems="center"
         justifyContent="space-between"
         w="100%"
         color="white"
-        p="11px"
+        p="7px"
       >
         <IconButton
           _hover={{
