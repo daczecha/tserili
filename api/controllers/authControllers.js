@@ -22,13 +22,10 @@ const registerUser = expressAsyncHandler(async (req, res) => {
   });
 
   const user = await newUser.save();
+
   const token = generateToken(user._id);
 
   const url = `http://localhost:8800/auth/confirmation/${token}`;
-
-  console.log(token);
-  console.log(url.slice(40));
-  console.log('Token match:', token === url.slice(40));
 
   transporter.sendMail({
     from: 'Tserili Noreply',
@@ -46,14 +43,20 @@ const loginUser = expressAsyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    res.status(401);
-    throw new Error("Account with that email doesn't exist");
+    res.status(401).send({
+      email: "Account with that email doesn't exist",
+      password: '',
+      confirmation: '',
+    });
   }
 
   if (user && (await user.verifyPassword(password))) {
     if (!user.confirmed) {
-      res.status(401);
-      throw new Error('Please confirm your account!');
+      return res.status(401).send({
+        email: '',
+        password: '',
+        confirmation: 'Please confirm your account',
+      });
     }
 
     return res.status(200).json({
@@ -64,8 +67,11 @@ const loginUser = expressAsyncHandler(async (req, res) => {
       token: generateToken(user._id),
     });
   } else {
-    res.status(401);
-    throw new Error('Password incorrect!');
+    return res.status(401).send({
+      email: '',
+      password: 'Password is incorrect',
+      confirmation: '',
+    });
   }
 });
 

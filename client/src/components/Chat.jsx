@@ -1,11 +1,11 @@
 import { Badge, Box, Flex } from '@chakra-ui/react';
-import { ChatState } from '../Context/ChatProvider';
+import { State } from '../Context/Provider';
 import Header from './Header';
 import MessageBox from './MessageBox';
 import MessageForm from './MessageForm';
 
 function Chat() {
-  const { selectedChat } = ChatState();
+  const { selectedChat } = State();
   return (
     <>
       {selectedChat ? (

@@ -7,10 +7,18 @@ const notFound = (req, res, next) => {
 const errorHandler = (err, req, res, next) => {
   const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
   res.status(statusCode);
-  res.json({
-    message: err.message,
-    stack: process.env.NODE_ENV === 'production' ? null : err.stack,
-  });
+
+  let errors = { email: '', password: '', confirmation: '' };
+
+  console.log(err);
+
+  if (err.code === 11000) {
+    errors.email = 'User with that email is already registered';
+  } else {
+    errors = err;
+  }
+
+  res.json(errors);
 };
 
 module.exports = { notFound, errorHandler };

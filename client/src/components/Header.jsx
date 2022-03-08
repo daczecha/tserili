@@ -10,10 +10,10 @@ import {
 } from '@chakra-ui/react';
 
 import { FaEllipsisV } from 'react-icons/fa';
-import { ChatState } from '../Context/ChatProvider';
+import { State } from '../Context/Provider';
 
 function Header() {
-  const { setSelectedChat } = ChatState();
+  const { setSelectedChat } = State();
   return (
     <Flex
       p="10px 20px 10px 20px"

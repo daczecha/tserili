@@ -16,10 +16,10 @@ import { BiUser } from 'react-icons/bi';
 import ContactList from './ContactList';
 import Search from './Search';
 
-import { ChatState } from '../Context/ChatProvider';
+import { State } from '../Context/Provider';
 
 function Sidebar() {
-  const { selectedChat } = ChatState();
+  const { selectedChat } = State();
   return (
     <VStack
       position="relative"

@@ -9,7 +9,7 @@ import {
   Flex,
 } from '@chakra-ui/react';
 import React from 'react';
-import { ChatState } from '../Context/ChatProvider';
+import { State } from '../Context/Provider';
 
 const notificationBadgeCSS = {
   position: 'relative',
@@ -29,7 +29,7 @@ const notificationNumberCSS = {
 };
 
 function Contact(props) {
-  const { setSelectedChat } = ChatState();
+  const { setSelectedChat } = State();
 
   return (
     <StackItem
