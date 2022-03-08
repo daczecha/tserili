@@ -71,7 +71,6 @@ const loginUser = expressAsyncHandler(async (req, res) => {
 
 const emailConfirmation = expressAsyncHandler(async (req, res) => {
   const token = req.params.token;
-
   const { id } = jwt.verify(token, process.env.JWT_SECRET);
   await User.findByIdAndUpdate(id, { confirmed: true });
   res.redirect('http://localhost:3000/login');

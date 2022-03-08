@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
 const authRoutes = require('./routes/authRoutes');
+const { notFound, errorHandler } = require('./middlewares/errorMiddleware');
 
 dotenv.config();
 
@@ -20,6 +21,9 @@ mongoose.connect(
 app.use(express.json());
 
 app.use('/auth', authRoutes);
+
+app.use(notFound);
+app.use(errorHandler);
 
 app.listen(8800, () => {
   console.log('Backend server is running!');
