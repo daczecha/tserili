@@ -3,13 +3,31 @@ import { Flex, Icon, IconButton } from '@chakra-ui/react';
 import { ImAttachment } from 'react-icons/im';
 import { FaRegSmile } from 'react-icons/fa';
 import { BiMicrophone } from 'react-icons/bi';
+import { IoMdSend } from 'react-icons/io';
 
-import './MessageForm.css';
+import './css/MessageForm.css';
+import { useState } from 'react';
 
 function MessageForm() {
+  const [messageText, setMessageText] = useState('');
+
   const resizeTextarea = (e) => {
     e.target.style.height = '50px';
     e.target.style.height = `${e.target.scrollHeight}px`;
+  };
+
+  const handleChange = (e) => {
+    setMessageText(e.target.value);
+  };
+
+  const submit = () => {
+    setMessageText('');
+  };
+
+  const handleSubmit = (e) => {
+    if (!e.shiftKey && e.key === 'Enter') e.preventDefault();
+    if (e.shiftKey && e.key === 'Enter') return;
+    if (e.key === 'Enter' && messageText) submit();
   };
 
   return (
@@ -47,9 +65,12 @@ function MessageForm() {
           maxHeight: '150px',
         }}
         onKeyUp={resizeTextarea}
-        spellcheck="false"
+        onKeyDown={handleSubmit}
+        spellCheck="false"
         placeholder="Message"
         required
+        onChange={handleChange}
+        value={messageText}
       />
 
       <IconButton
@@ -64,16 +85,30 @@ function MessageForm() {
         icon={<Icon as={FaRegSmile} color="#ccc" fontSize="2xl" />}
       />
 
-      <IconButton
-        _hover={{
-          background: '#333',
-        }}
-        _focus={{}}
-        m="10px"
-        borderRadius="50%"
-        bg="transparent"
-        icon={<Icon as={BiMicrophone} color="#ccc" fontSize="28px" />}
-      />
+      {messageText.trim() ? (
+        <IconButton
+          _hover={{
+            background: '#333',
+          }}
+          _focus={{}}
+          m="10px"
+          borderRadius="50%"
+          bg="transparent"
+          icon={<Icon as={IoMdSend} color="#ccc" fontSize="28px" />}
+          onClick={submit}
+        />
+      ) : (
+        <IconButton
+          _hover={{
+            background: '#333',
+          }}
+          _focus={{}}
+          m="10px"
+          borderRadius="50%"
+          bg="transparent"
+          icon={<Icon as={BiMicrophone} color="#ccc" fontSize="28px" />}
+        />
+      )}
     </Flex>
   );
 }

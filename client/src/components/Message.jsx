@@ -1,5 +1,5 @@
 import { BsCheck2All } from 'react-icons/bs';
-import { Box, Flex, StackItem, Text } from '@chakra-ui/react';
+import { Box, StackItem, Text } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/icons';
 import React from 'react';
 
@@ -24,16 +24,24 @@ function Message({ received }) {
           voluptate earum aliquam modi odit eius autem tenetur fugit minima
           dolores? Consectetur sed fugiat, iste enim a labore voluptatem
           veritatis distinctio!
-          <Flex
-            alignItems="center"
-            justifyContent="space-between"
-            float="right"
+          <span
+            style={{
+              display: 'flex',
+              float: 'right',
+            }}
           >
-            <Text mr="3px" userSelect="none" color="#ddd" fontSize="sm">
+            <span
+              style={{
+                color: '#ddd',
+                fontSize: '15px',
+                marginRight: '3px',
+                userSelect: 'none',
+              }}
+            >
               19:00
-            </Text>
+            </span>
             {!received && <Icon color="#ddd" fontSize="lg" as={BsCheck2All} />}
-          </Flex>
+          </span>
         </Text>
       </Box>
     </StackItem>
