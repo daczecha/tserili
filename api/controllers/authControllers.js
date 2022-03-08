@@ -22,10 +22,13 @@ const registerUser = expressAsyncHandler(async (req, res) => {
   });
 
   const user = await newUser.save();
-
   const token = generateToken(user._id);
 
   const url = `http://localhost:8800/auth/confirmation/${token}`;
+
+  console.log(token);
+  console.log(url.slice(40));
+  console.log('Token match:', token === url.slice(40));
 
   transporter.sendMail({
     from: 'Tserili Noreply',
@@ -55,7 +58,7 @@ const loginUser = expressAsyncHandler(async (req, res) => {
 
     return res.status(200).json({
       _id: user._id,
-      name: user.name,
+      username: user.username,
       email: user.email,
       avatar: user.avatar,
       token: generateToken(user._id),
@@ -68,8 +71,9 @@ const loginUser = expressAsyncHandler(async (req, res) => {
 
 const emailConfirmation = expressAsyncHandler(async (req, res) => {
   const token = req.params.token;
+
   const { id } = jwt.verify(token, process.env.JWT_SECRET);
-  await User.updateOne({ id }, { confirmed: true });
+  await User.findByIdAndUpdate(id, { confirmed: true });
   res.redirect('http://localhost:3000/login');
 });
 
