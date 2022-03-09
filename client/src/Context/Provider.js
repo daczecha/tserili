@@ -7,6 +7,9 @@ const Provider = ({ children }) => {
     JSON.parse(localStorage.getItem('userInfo'))
   );
   const [selectedChat, setSelectedChat] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [contacts, setContacts] = useState([]);
+  const [query, setQuery] = useState('');
 
   return (
     <Context.Provider
@@ -15,6 +18,12 @@ const Provider = ({ children }) => {
         setSelectedChat,
         user,
         setUser,
+        searchResults,
+        setSearchResults,
+        query,
+        setQuery,
+        contacts,
+        setContacts,
       }}
     >
       {children}

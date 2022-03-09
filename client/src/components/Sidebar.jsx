@@ -17,9 +17,11 @@ import ContactList from './ContactList';
 import Search from './Search';
 
 import { State } from '../Context/Provider';
+import SearchResults from './SearchResults';
 
 function Sidebar() {
-  const { selectedChat } = State();
+  const { query, selectedChat } = State();
+
   return (
     <VStack
       position="relative"
@@ -52,7 +54,7 @@ function Sidebar() {
         />
         <Search />
       </Flex>
-      <ContactList />
+      {query ? <SearchResults /> : <ContactList />}
       <Menu>
         <MenuButton
           _hover={{}}
