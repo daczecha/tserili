@@ -2,16 +2,22 @@ import { Center, Spinner, useToast } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function Confirmation() {
+import { State } from '../../Context/Provider';
+
+function Confirmed() {
   const navigate = useNavigate();
   const toast = useToast();
 
+  const { user } = State();
+
   useEffect(() => {
+    if (user) return navigate('/');
+
     if (!toast.isActive('toast')) {
       toast({
         id: 'toast',
-        title: 'Confirmation successfull',
-        status: 'success',
+        title: 'User already confirmed',
+        status: 'warning',
         duration: 3000,
         isClosable: true,
       });
@@ -27,4 +33,4 @@ function Confirmation() {
   );
 }
 
-export default Confirmation;
+export default Confirmed;

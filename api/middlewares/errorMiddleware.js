@@ -8,11 +8,23 @@ const errorHandler = (err, req, res, next) => {
   const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
   res.status(statusCode);
 
-  let errors = { email: '', password: '', confirmation: '' };
+  let errors = { email: '', username: '', password: '', confirmation: '' };
 
-  console.log(err);
+  if (err.message.includes('User validation failed')) {
+    if (err.errors.email) errors.email = 'Please provide valid email';
 
-  if (err.code === 11000) {
+    if (err.errors.username) {
+      switch (err.errors.username.kind) {
+        case 'minlength':
+          errors.username = 'Username must be minimum 3 characters long';
+          break;
+        case 'maxlength':
+          errors.username = 'Username must be maximum 20 characters long';
+          break;
+        default:
+      }
+    }
+  } else if (err.code === 11000) {
     errors.email = 'User with that email is already registered';
   } else {
     errors = err;

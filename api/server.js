@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 
 const authRoutes = require('./routes/authRoutes');
+const authorize = require('./middlewares/authMiddleware');
 const { notFound, errorHandler } = require('./middlewares/errorMiddleware');
 
 dotenv.config();
@@ -23,6 +24,9 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/auth', authRoutes);
+app.get('/check', authorize, (req, res) => {
+  res.json(req.user);
+});
 
 app.use(notFound);
 app.use(errorHandler);

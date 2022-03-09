@@ -105,7 +105,7 @@ function Login() {
                 borderRadius="10px"
                 focusBorderColor="#8774E1"
                 id="email"
-                type="email"
+                type="text"
                 value={email}
                 onChange={(e) => {
                   setEmail(e.target.value);
@@ -158,9 +158,9 @@ function Login() {
                     onClick={() => setShowPassword(!showPassword)}
                     icon={
                       showPassword ? (
-                        <ViewOffIcon fontSize="lg" />
-                      ) : (
                         <ViewIcon fontSize="lg" />
+                      ) : (
+                        <ViewOffIcon fontSize="lg" />
                       )
                     }
                   />

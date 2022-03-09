@@ -12,10 +12,12 @@ import {
   Text,
   Link,
   IconButton,
+  Progress,
+  Tooltip,
   useToast,
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
+import { InfoOutlineIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -25,8 +27,11 @@ function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const [passwordStrength, setPasswordStrength] = useState('');
+
   const [errors, setErrors] = useState({
     email: '',
+    username: '',
     password: '',
     confirmation: '',
   });
@@ -36,9 +41,43 @@ function Register() {
   const [password, setPassword] = useState('');
 
   const navigate = useNavigate();
+  const toast = useToast();
+
+  const passwordHandler = (e) => {
+    let strongPassword = new RegExp(
+      '(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})'
+    );
+    let mediumPassword = new RegExp(
+      '((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,}))|((?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9])(?=.{8,}))'
+    );
+
+    setPassword(e.target.value);
+    setErrors({
+      ...errors,
+      password: '',
+    });
+
+    if (e.target.value) {
+      if (strongPassword.test(e.target.value)) {
+        setPasswordStrength('Strong');
+      } else if (mediumPassword.test(e.target.value)) {
+        setPasswordStrength('Medium');
+      } else {
+        setPasswordStrength('Weak');
+      }
+    } else {
+      setPasswordStrength('');
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (passwordStrength === 'Weak') {
+      setErrors({ ...errors, password: 'Password is too weak' });
+      return;
+    }
+
     setLoading(true);
     setErrors({
       email: '',
@@ -53,14 +92,22 @@ function Register() {
         password,
       };
 
-      const data = await registerUser(body);
-      if (data) navigate('/confirmation');
+      await registerUser(body);
 
       setPassword('');
       setUsername('');
       setEmail('');
 
-      setLoading(true);
+      setLoading(false);
+
+      toast({
+        title: 'Register successfull.',
+        description: 'Confirmation email sent',
+        status: 'info',
+        duration: 3000,
+        isClosable: true,
+      });
+      navigate('/login');
     } catch (error) {
       setErrors(error.response.data);
       setLoading(false);
@@ -101,7 +148,7 @@ function Register() {
                 borderRadius="10px"
                 focusBorderColor="#8774E1"
                 id="email"
-                type="email"
+                type="text"
                 value={email}
                 onChange={(e) => {
                   setEmail(e.target.value);
@@ -131,15 +178,39 @@ function Register() {
                 id="username"
                 type="text"
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                  setErrors({
+                    ...errors,
+                    username: '',
+                  });
+                }}
                 required
               />
+              <Text my="5px" color="#e86161">
+                {errors.username}
+              </Text>
             </FormControl>
             <FormControl>
-              <FormLabel m="0" htmlFor="email">
+              <FormLabel
+                d="flex"
+                justifyContent="space-between"
+                m="0"
+                htmlFor="email"
+              >
                 <Heading color="#aaa" fontSize={'md'}>
                   Password
                 </Heading>
+                <Tooltip
+                  label="The password must be at least 6 characters long,
+                                have at least one uppercase letter [A-Z], lowercase letter [a-z], digit [0-9] and special character [!@?]."
+                >
+                  <InfoOutlineIcon
+                    color="#8774E1"
+                    cursor="pointer"
+                    fontSize="md"
+                  />
+                </Tooltip>
               </FormLabel>
               <InputGroup>
                 <Input
@@ -150,13 +221,7 @@ function Register() {
                   id="password"
                   type={showPassword ? 'text' : 'password'}
                   value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    setErrors({
-                      ...errors,
-                      password: '',
-                    });
-                  }}
+                  onChange={passwordHandler}
                   required
                 />
                 <InputRightElement>
@@ -173,14 +238,42 @@ function Register() {
                     onClick={() => setShowPassword(!showPassword)}
                     icon={
                       showPassword ? (
-                        <ViewOffIcon fontSize="lg" />
-                      ) : (
                         <ViewIcon fontSize="lg" />
+                      ) : (
+                        <ViewOffIcon fontSize="lg" />
                       )
                     }
                   />
                 </InputRightElement>
               </InputGroup>
+              <Progress
+                d={passwordStrength ? 'inherit' : 'none'}
+                w="98%"
+                mx="auto"
+                mt="5px"
+                value={
+                  passwordStrength === 'Strong'
+                    ? 100
+                    : passwordStrength === 'Medium'
+                    ? 50
+                    : passwordStrength === 'Weak'
+                    ? 20
+                    : 0
+                }
+                borderRadius="lg"
+                size="xs"
+                colorScheme={
+                  passwordStrength === 'Strong'
+                    ? 'green'
+                    : passwordStrength === 'Medium'
+                    ? 'orange'
+                    : passwordStrength === 'Weak'
+                    ? 'red'
+                    : '#181818'
+                }
+                bg="#181818"
+              />
+
               <Text m="5px" color="#e86161">
                 {errors.password}
               </Text>
