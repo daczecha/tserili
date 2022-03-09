@@ -28,7 +28,7 @@ const registerUser = expressAsyncHandler(async (req, res) => {
 
   const token = generateToken(user._id);
 
-  const url = `http://localhost:8800/auth/confirmation/${token}`;
+  const url = `http://localhost:8800/api/auth/confirmation/${token}`;
 
   transporter.sendMail({
     from: process.env.NODEMAILER_USER,

@@ -4,6 +4,10 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 
 const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
+const conversationRoutes = require('./routes/conversationRoutes');
+const messageRoutes = require('./routes/messageRoutes');
+
 const authorize = require('./middlewares/authMiddleware');
 const { notFound, errorHandler } = require('./middlewares/errorMiddleware');
 
@@ -23,7 +27,11 @@ mongoose.connect(
 app.use(cors());
 app.use(express.json());
 
-app.use('/auth', authRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api/conversation', conversationRoutes);
+app.use('/api/message', messageRoutes);
+
 app.get('/check', authorize, (req, res) => {
   res.json(req.user);
 });
