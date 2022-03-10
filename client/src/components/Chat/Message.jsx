@@ -3,7 +3,7 @@ import { Box, StackItem, Text } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/icons';
 import React from 'react';
 
-function Message({ received }) {
+function Message({ received, content }) {
   const bgColor = received ? '#212121' : '#816FD4';
 
   return (
@@ -20,10 +20,7 @@ function Message({ received }) {
         maxW="75%"
       >
         <Text fontSize="md" pos="relative">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit
-          voluptate earum aliquam modi odit eius autem tenetur fugit minima
-          dolores? Consectetur sed fugiat, iste enim a labore voluptatem
-          veritatis distinctio!
+          {content}
           <span
             style={{
               display: 'flex',

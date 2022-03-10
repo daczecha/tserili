@@ -1,13 +1,10 @@
-import { Flex, VStack, Text } from '@chakra-ui/react';
-import { State } from '../Context/Provider';
+import { VStack, Text } from '@chakra-ui/react';
+import { State } from '../../Context/Provider';
 
 import User from './User';
 
 function SearchResults() {
-  const { contacts, searchResults } = State();
-
-  console.log(contacts);
-  console.log(searchResults);
+  const { query, searchResults } = State();
 
   const renderResults = searchResults.map((c) => (
     <User key={c._id} bgColor="#212121" hoverColor="#2b2b2b" data={c} />
@@ -22,7 +19,13 @@ function SearchResults() {
       overflowY="auto"
       align="stretch"
     >
-      {renderResults ? renderResults : <Text>No Users found</Text>}
+      {searchResults.length > 0 ? (
+        renderResults
+      ) : query ? (
+        <Text color="white">No users found</Text>
+      ) : (
+        <Text color="white">Search for users</Text>
+      )}
     </VStack>
   );
 }

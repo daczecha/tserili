@@ -5,10 +5,13 @@ import { FaRegSmile } from 'react-icons/fa';
 import { BiMicrophone } from 'react-icons/bi';
 import { IoMdSend } from 'react-icons/io';
 
-import './css/MessageForm.css';
+import '../css/MessageForm.css';
 import { useState } from 'react';
+import { sendMessage } from '../../services/messageServices';
+import { State } from '../../Context/Provider';
 
-function MessageForm() {
+function MessageForm({ chatId }) {
+  const { messages, setMessages, user } = State();
   const [messageText, setMessageText] = useState('');
 
   const resizeTextarea = (e) => {
@@ -20,7 +23,13 @@ function MessageForm() {
     setMessageText(e.target.value);
   };
 
-  const submit = () => {
+  const submit = async () => {
+    try {
+      const data = await sendMessage(user.token, messageText, chatId);
+      setMessages([...messages, data]);
+    } catch (err) {
+      console.log(err);
+    }
     setMessageText('');
   };
 

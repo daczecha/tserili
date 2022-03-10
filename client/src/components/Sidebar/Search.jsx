@@ -2,11 +2,11 @@ import { useEffect } from 'react';
 import { Input, InputGroup, InputLeftElement } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
 
-import { State } from '../Context/Provider';
-import { getUsers } from '../services/userServices';
+import { State } from '../../Context/Provider';
+import { getUsers } from '../../services/userServices';
 
 function Search() {
-  const { query, setQuery, user, setSearchResults } = State();
+  const { user, query, setQuery, setSearch, setSearchResults } = State();
 
   useEffect(() => {
     setSearchResults([]);
@@ -14,9 +14,10 @@ function Search() {
       const data = await getUsers(user.token, query);
       setSearchResults(data);
     };
-    if (query) fetchUsers();
+    if (query.trim()) fetchUsers();
     else {
       setSearchResults([]);
+      setSearch(false);
     }
     //eslint-disable-next-line
   }, [query]);
@@ -35,7 +36,10 @@ function Search() {
         type="text"
         placeholder="Search"
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={(e) => {
+          setQuery(e.target.value);
+          setSearch(true);
+        }}
       />
     </InputGroup>
   );

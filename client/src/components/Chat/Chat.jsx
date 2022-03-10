@@ -1,11 +1,17 @@
 import { Badge, Box, Flex } from '@chakra-ui/react';
-import { State } from '../Context/Provider';
 import Header from './Header';
 import MessageBox from './MessageBox';
 import MessageForm from './MessageForm';
 
+import { State } from '../../Context/Provider';
+
 function Chat() {
-  const { selectedChat } = State();
+  const { user, selectedChat, selectedLoadingChat } = State();
+
+  const { username, avatar } = selectedChat
+    ? selectedChat.users.find((u) => u._id !== user._id)
+    : '';
+
   return (
     <>
       {selectedChat ? (
@@ -17,7 +23,23 @@ function Chat() {
           flexDir="column"
           overflow="hidden"
         >
-          <Header />
+          <Header username={username} avatar={avatar} />
+          <MessageBox chatId={selectedChat._id} />
+          <MessageForm chatId={selectedChat._id} />
+        </Box>
+      ) : selectedLoadingChat ? (
+        <Box
+          d={{ base: selectedChat ? 'flex' : 'none', md: 'flex' }}
+          h="100%"
+          flex="7"
+          bg="#0f0f0f"
+          flexDir="column"
+          overflow="hidden"
+        >
+          <Header
+            username={selectedLoadingChat.username}
+            avatar={selectedLoadingChat.avatar}
+          />
           <MessageBox />
           <MessageForm />
         </Box>

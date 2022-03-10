@@ -8,12 +8,44 @@ import {
   StackItem,
   Text,
 } from '@chakra-ui/react';
+import { accessChat } from '../../services/chatServices';
+import { State } from '../../Context/Provider';
 
 function User({ hoverColor, bgColor, data }) {
-  const { username, avatar } = data;
+  const {
+    user,
+    setQuery,
+    setSearchResults,
+    setSelectedChat,
+    contacts,
+    setContacts,
+    setSelectedLoadingChat,
+  } = State();
+  const { username, avatar, email } = data;
+
+  const handleAccessChat = async () => {
+    try {
+      setSelectedLoadingChat({ username, avatar });
+
+      setQuery('');
+      setSearchResults([]);
+
+      const newContact = await accessChat(user.token, data._id);
+
+      if (!(contacts.filter((e) => e._id === newContact._id).length > 0)) {
+        setContacts([...contacts, newContact]);
+      }
+
+      setSelectedChat(newContact);
+      setSelectedLoadingChat('');
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <StackItem
+      onClick={handleAccessChat}
       _hover={{
         cursor: 'pointer',
         background: hoverColor,
@@ -35,8 +67,7 @@ function User({ hoverColor, bgColor, data }) {
           </Flex>
           <Flex justifyContent="space-between" alignItems="center">
             <Text fontSize="md" color="gray">
-              <span style={{ color: 'white' }}></span>
-              Test
+              {email}
             </Text>
           </Flex>
         </Box>

@@ -10,10 +10,13 @@ import {
 } from '@chakra-ui/react';
 
 import { FaEllipsisV } from 'react-icons/fa';
-import { State } from '../Context/Provider';
+import { State } from '../../Context/Provider';
 
-function Header() {
+function Header({ username, avatar }) {
   const { setSelectedChat } = State();
+
+  console.log(username);
+
   return (
     <Flex
       p="10px 20px 10px 20px"
@@ -42,8 +45,8 @@ function Header() {
           width="42px"
           height="42px"
           size={useBreakpointValue({ base: 'sm', sm: 'md' })}
-          name="მარიამ კერესელიძე"
-          src=""
+          name={username}
+          src={avatar}
         />
         <Flex
           ml={{ base: '8px', sm: '15px' }}
@@ -51,7 +54,7 @@ function Header() {
           justifyContent="center"
         >
           <Heading fontSize="sm" font="bold">
-            მარიამი
+            {username}
           </Heading>
           <Text fontSize="sm" color="#8774E1">
             online

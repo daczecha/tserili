@@ -16,11 +16,11 @@ import { BiUser } from 'react-icons/bi';
 import ContactList from './ContactList';
 import Search from './Search';
 
-import { State } from '../Context/Provider';
+import { State } from '../../Context/Provider';
 import SearchResults from './SearchResults';
 
 function Sidebar() {
-  const { query, selectedChat } = State();
+  const { selectedChat, search, setSearch } = State();
 
   return (
     <VStack
@@ -54,7 +54,7 @@ function Sidebar() {
         />
         <Search />
       </Flex>
-      {query ? <SearchResults /> : <ContactList />}
+      {search ? <SearchResults /> : <ContactList />}
       <Menu>
         <MenuButton
           _hover={{}}
@@ -86,6 +86,7 @@ function Sidebar() {
             _active={{}}
             _hover={{ background: '#333' }}
             icon={<Icon fontSize="20px" as={BiUser} />}
+            onClick={() => setSearch(true)}
           >
             New Private Chat
           </MenuItem>

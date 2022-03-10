@@ -9,7 +9,7 @@ import {
   Flex,
 } from '@chakra-ui/react';
 import React from 'react';
-import { State } from '../Context/Provider';
+import { State } from '../../Context/Provider';
 
 function Contact({ selected, data }) {
   const bgColor = selected ? '#7C6BCC' : '#212121';
@@ -33,14 +33,17 @@ function Contact({ selected, data }) {
     fontWeight: 600,
   };
 
-  const { setSelectedChat } = State();
-  const { user } = State();
+  const { user, setSelectedChat } = State();
 
   const { username, avatar } = data.users.find((u) => u._id !== user._id);
 
+  const handleSelect = () => {
+    setSelectedChat(data);
+  };
+
   return (
     <StackItem
-      onClick={() => setSelectedChat(data._id)}
+      onClick={handleSelect}
       _hover={{
         cursor: 'pointer',
         background: hoverColor,
@@ -50,7 +53,7 @@ function Contact({ selected, data }) {
       color="white"
       borderRadius="14px"
     >
-      <HStack display="flex" alignItems="center" w="100%" h="100%" p="10px">
+      <HStack alignItems="center" w="100%" h="100%" p="10px">
         <Avatar size="md" name={username} src={avatar}>
           <AvatarBadge
             borderColor={bgColor}
@@ -69,7 +72,7 @@ function Contact({ selected, data }) {
           </Flex>
           <Flex justifyContent="space-between" alignItems="center">
             <Text fontSize="md" color={selected ? 'white' : 'gray'}>
-              {data.latestMessage.content}
+              {data.latestMessage && data.latestMessage.content}
             </Text>
             <span style={notificationBadgeCSS}>
               <span style={notificationNumberCSS}>{1}</span>
