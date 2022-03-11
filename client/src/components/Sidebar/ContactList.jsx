@@ -1,32 +1,12 @@
 import { VStack } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
 import { State } from '../../Context/Provider';
-
-import { getChats } from '../../services/chatServices';
 
 import ListLoading from '../Loading/ListLoading';
 
 import Contact from './Contact';
 
 function ContactList() {
-  const { user, contacts, setContacts, selectedChat } = State();
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const fetchContacts = async () => {
-      setLoading(true);
-      try {
-        const data = await getChats(user.token);
-        setContacts(data);
-        setLoading(false);
-      } catch (err) {
-        console.log(err);
-        setLoading(false);
-      }
-    };
-    if (!contacts.length) fetchContacts();
-    //eslint-disable-next-line
-  }, []);
+  const { contacts, selectedChat } = State();
 
   const renderContacts = contacts.map((c) => (
     <Contact
@@ -45,7 +25,7 @@ function ContactList() {
       overflowY="auto"
       align="stretch"
     >
-      {loading ? <ListLoading /> : renderContacts}
+      {contacts.length > 0 ? renderContacts : <ListLoading />}
     </VStack>
   );
 }

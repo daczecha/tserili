@@ -1,33 +1,68 @@
 import { Spinner, VStack } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { State } from '../../Context/Provider';
-import { getMessages } from '../../services/messageServices';
 
 import Message from './Message';
 
-function MessageBox({ chatId }) {
-  const { messages, setMessages, user } = State();
-  const [loading, setLoading] = useState(false);
+import { io } from 'socket.io-client';
+
+function MessageBox({ chatId, members }) {
+  const { user, messages, newMessages, setMessages, contacts } = State();
+
+  const thisNewMessages = newMessages.filter((m) => m.chatId === chatId);
+
+  const [arrivalMessage, setArrivalMessage] = useState(null);
+
+  const scrollRef = useRef();
+
+  const socket = useRef(io('ws://localhost:8900')); 
+
+  useEffect(()=>socket.current =io('ws://localhost:8900'),[])
 
   useEffect(() => {
-    setLoading(true);
+    socket.current.on('getMessage', (data) => {
+      console.log('yay')
+      setArrivalMessage({
+        sender: data.senderId,
+        content: data.content,
+        createdAt: Date.now(),
+      });
+    });
+  }, []);
 
-    const fetchMessages = async () => {
-      const data = await getMessages(user.token, chatId);
-      setMessages(data);
-      setLoading(false);
-    };
+  useEffect(() => {
+    arrivalMessage &&
+      members.includes(arrivalMessage.sender) &&
+      setMessages([contacts.find((c) => c._id === chatId).messages, arrivalMessage]);
+  }, [arrivalMessage, chatId]);
 
-    fetchMessages();
+  useEffect(() => {
+    setMessages(contacts.find((c) => c._id === chatId).messages);
+    scrollRef.current?.scrollIntoView();
+
     //eslint-disable-next-line
   }, [chatId]);
 
-  console.log(messages);
 
-  const renderMessages = messages.map((m) => {
-    const received = m.sender._id !== user._id;
-    return <Message key={m._id} content={m.content} received={received} />;
-  });
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [newMessages]);
+
+
+  const renderMessages = messages
+    ? messages.map((m) => {
+        const received = m.sender._id !== user._id;
+        return (
+          <Message
+            key={m._id}
+            content={m.content}
+            received={received}
+            sentSuccessfull={true}
+          />
+        );
+      })
+    : [];
+
 
   return (
     <VStack
@@ -36,10 +71,20 @@ function MessageBox({ chatId }) {
       width="100%"
       height="100%"
       overflowY="auto"
-      justify={loading ? 'center' : ''}
-      align={loading ? 'center' : ''}
+      justify={messages ? '' : 'center'}
+      align={messages ? '' : 'center'}
     >
-      {loading ? <Spinner color="gray" size="xl" /> : renderMessages}
+      {messages ? renderMessages : <Spinner color="gray" size="xl" />}
+      {thisNewMessages
+        ? thisNewMessages.map((m) => (
+            <Message
+              sentSuccessfull={false}
+              received={false}
+              content={m.content}
+            />
+          ))
+        : null}
+      <div ref={scrollRef} style={{ visibility: 'none' }}></div>
     </VStack>
   );
 }

@@ -6,15 +6,19 @@ const Provider = ({ children }) => {
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem('userInfo'))
   );
+
   const [search, setSearch] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [query, setQuery] = useState('');
+
   const [contacts, setContacts] = useState([]);
 
   const [messages, setMessages] = useState([]);
 
   const [selectedChat, setSelectedChat] = useState('');
   const [selectedLoadingChat, setSelectedLoadingChat] = useState('');
+
+  const [newMessages, setNewMessages] = useState([]);
 
   return (
     <Context.Provider
@@ -35,6 +39,9 @@ const Provider = ({ children }) => {
         setSearch,
         messages,
         setMessages,
+
+        newMessages,
+        setNewMessages,
       }}
     >
       {children}

@@ -11,7 +11,7 @@ import {
 import React from 'react';
 import { State } from '../../Context/Provider';
 
-function Contact({ selected, data }) {
+function Contact({ selected, data, sent }) {
   const bgColor = selected ? '#7C6BCC' : '#212121';
   const hoverColor = selected ? '#7C6BCC' : '#2b2b2b';
 
@@ -72,7 +72,11 @@ function Contact({ selected, data }) {
           </Flex>
           <Flex justifyContent="space-between" alignItems="center">
             <Text fontSize="md" color={selected ? 'white' : 'gray'}>
-              {data.latestMessage && data.latestMessage.content}
+              {data.latestMessage
+                ? data.latestMessage.content.length >= 10
+                  ? data.latestMessage.content.substring(0, 15) + '...'
+                  : data.latestMessage.content
+                : ''}
             </Text>
             <span style={notificationBadgeCSS}>
               <span style={notificationNumberCSS}>{1}</span>

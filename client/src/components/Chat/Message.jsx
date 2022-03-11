@@ -1,9 +1,9 @@
-import { BsCheck2All } from 'react-icons/bs';
+import { AiOutlineClockCircle, AiOutlineCheck } from 'react-icons/ai';
 import { Box, StackItem, Text } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/icons';
 import React from 'react';
 
-function Message({ received, content }) {
+function Message({ sentSuccessfull, received, content }) {
   const bgColor = received ? '#212121' : '#816FD4';
 
   return (
@@ -25,19 +25,29 @@ function Message({ received, content }) {
             style={{
               display: 'flex',
               float: 'right',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginLeft: '10px',
             }}
           >
             <span
               style={{
                 color: '#ddd',
-                fontSize: '15px',
+                fontSize: '12px',
+                fontFamily: 'sans-serif',
                 marginRight: '3px',
                 userSelect: 'none',
               }}
             >
               19:00
             </span>
-            {!received && <Icon color="#ddd" fontSize="lg" as={BsCheck2All} />}
+            {!received && (
+              <Icon
+                color="#ddd"
+                fontSize="sm"
+                as={sentSuccessfull ? AiOutlineCheck : AiOutlineClockCircle}
+              />
+            )}
           </span>
         </Text>
       </Box>

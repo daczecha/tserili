@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { accessChat } from '../../services/chatServices';
 import { State } from '../../Context/Provider';
+import { getMessages } from '../../services/messageServices';
 
 function User({ hoverColor, bgColor, data }) {
   const {
@@ -30,7 +31,9 @@ function User({ hoverColor, bgColor, data }) {
       setQuery('');
       setSearchResults([]);
 
-      const newContact = await accessChat(user.token, data._id);
+      let newContact = await accessChat(user.token, data._id);
+
+      newContact.messages = await getMessages(user.token, newContact._id);
 
       if (!(contacts.filter((e) => e._id === newContact._id).length > 0)) {
         setContacts([...contacts, newContact]);

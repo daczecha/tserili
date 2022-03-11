@@ -15,8 +15,6 @@ import { State } from '../../Context/Provider';
 function Header({ username, avatar }) {
   const { setSelectedChat } = State();
 
-  console.log(username);
-
   return (
     <Flex
       p="10px 20px 10px 20px"
