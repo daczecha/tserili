@@ -11,6 +11,8 @@ const messageRoutes = require('./routes/messageRoutes');
 const authorize = require('./middlewares/authMiddleware');
 const { notFound, errorHandler } = require('./middlewares/errorMiddleware');
 
+const SocketServer = require('./SocketServer');
+
 dotenv.config();
 
 const app = express();
@@ -39,6 +41,17 @@ app.get('/check', authorize, (req, res) => {
 app.use(notFound);
 app.use(errorHandler);
 
-app.listen(8800, () => {
+const server = app.listen(8800, () => {
   console.log('Backend server is running!');
+});
+
+const io = require('socket.io')(server, {
+  cors: {
+    origin: 'http://localhost:3000',
+  },
+});
+
+io.on('connection', (socket) => {
+  console.log(socket.id, 'connected');
+  SocketServer(socket);
 });

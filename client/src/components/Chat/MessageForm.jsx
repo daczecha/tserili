@@ -6,19 +6,16 @@ import { BiMicrophone } from 'react-icons/bi';
 import { IoMdSend } from 'react-icons/io';
 
 import '../css/MessageForm.css';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useState } from 'react';
 import { sendMessage } from '../../services/messageServices';
 import { State } from '../../Context/Provider';
-
-import { io } from 'socket.io-client';
+import { SocketContext } from '../../Context/SocketContext';
 
 function MessageForm({ chatId, members }) {
+  const socket = useContext(SocketContext);
+
   const { setMessages, user, newMessages, setNewMessages } = State();
   const [messageText, setMessageText] = useState('');
-
-  const socket = useRef();
-
-  useEffect(()=>socket.current =io('ws://localhost:8900'),[])
 
   const resizeTextarea = (e) => {
     e.target.style.height = '50px';
@@ -33,16 +30,15 @@ function MessageForm({ chatId, members }) {
     let tempMessageContent = messageText;
     setMessageText('');
 
-    const receiverId = members.find((member) => member._id !== user._id)._id;
+    const receiverId = members.find((m) => m._id !== user._id)._id;
 
     try {
       setNewMessages([...newMessages, { content: tempMessageContent, chatId }]);
       const data = await sendMessage(user.token, tempMessageContent, chatId);
 
-      socket.current.emit('sendMessage', {
-        senderId: user._id,
+      socket.emit('sendMessage', {
         receiverId,
-        content: data,
+        message: data,
       });
 
       setMessages((prev) => [...prev, data]);

@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
 const Context = createContext();
 
@@ -20,28 +26,40 @@ const Provider = ({ children }) => {
 
   const [newMessages, setNewMessages] = useState([]);
 
+  const [socket, setSocket] = useState(null);
+
   return (
     <Context.Provider
       value={{
-        selectedChat,
-        setSelectedChat,
         user,
         setUser,
+
+        selectedChat,
+        setSelectedChat,
+
         searchResults,
         setSearchResults,
+
         query,
         setQuery,
+
         contacts,
         setContacts,
+
         selectedLoadingChat,
         setSelectedLoadingChat,
+
         search,
         setSearch,
+
         messages,
         setMessages,
 
         newMessages,
         setNewMessages,
+
+        socket,
+        setSocket,
       }}
     >
       {children}
