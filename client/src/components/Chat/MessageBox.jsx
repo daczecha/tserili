@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { State } from '../../Context/Provider';
 import { SocketContext } from '../../Context/SocketContext';
-import { updateLatestMessage } from '../../helper_functions';
 
 import { getMessages } from '../../services/messageServices';
 

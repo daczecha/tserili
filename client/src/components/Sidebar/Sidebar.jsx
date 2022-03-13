@@ -5,6 +5,7 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  useDisclosure,
   VStack,
 } from '@chakra-ui/react';
 
@@ -20,9 +21,11 @@ import Search from './Search';
 
 import { State } from '../../Context/Provider';
 import SearchResults from './SearchResults';
+import AccountSettings from './AccountSettings';
 
 function Sidebar() {
   const { contacts, selectedChat, search, setSearch } = State();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <VStack
@@ -45,6 +48,7 @@ function Sidebar() {
         p="7px"
       >
         <IconButton
+          onClick={onOpen}
           _hover={{
             background: '#333',
           }}
@@ -54,6 +58,7 @@ function Sidebar() {
           bg="transparent"
           icon={<HamburgerIcon fontSize="23px" />}
         />
+        <AccountSettings isOpen={isOpen} onClose={onClose} />
         <Search />
       </Flex>
       {search ? (
