@@ -1,9 +1,10 @@
 import axios from 'axios';
 const baseURL = 'http://localhost:8800/api/message';
 
-const getMessages = async (token, chatId) => {
+const getMessages = async (token, chatId, cancelTokenSource) => {
   const { data } = await axios.get(`${baseURL}/${chatId}`, {
     headers: { Authorization: `Bearer ${token}` },
+    cancelToken: cancelTokenSource.token,
   });
   return data;
 };

@@ -1,13 +1,19 @@
-import { Spinner, VStack } from '@chakra-ui/react';
+import { Flex, Spinner, VStack } from '@chakra-ui/react';
+import axios from 'axios';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { State } from '../../Context/Provider';
 import { SocketContext } from '../../Context/SocketContext';
+import { updateLatestMessage } from '../../helper_functions';
+
+import { getMessages } from '../../services/messageServices';
 
 import Message from './Message';
 
-function MessageBox({ chatId, members }) {
+function MessageBox({ chatId }) {
   const socket = useContext(SocketContext);
-  const { user, messages, newMessages, setMessages, contacts } = State();
+  const { user, messages, newMessages, setMessages } = State();
+
+  const [loading, setLoading] = useState(false);
 
   const thisNewMessages = newMessages.filter((m) => m.chatId === chatId);
 
@@ -15,22 +21,40 @@ function MessageBox({ chatId, members }) {
 
   useEffect(() => {
     socket.on('getMessage', (data) => {
-      console.log(data.sender.username, '---->', data.content);
+      setMessages((prev) => [...prev, data]);
+      //update latest message
     });
+
+    //eslint-disable-next-line
   }, []);
 
   useEffect(() => {
-    setMessages(contacts.find((c) => c._id === chatId).messages);
+    const cancelTokenSource = axios.CancelToken.source();
+
+    setLoading(true);
+    setMessages([]);
+
+    const fetchMessages = async () => {
+      try {
+        const data = await getMessages(user.token, chatId, cancelTokenSource);
+        setMessages(data);
+        setLoading(false);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchMessages();
+
+    return () => {
+      cancelTokenSource.cancel();
+    };
     //eslint-disable-next-line
   }, [chatId]);
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView();
-  }, [messages]);
-
-  useEffect(() => {
-    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [newMessages]);
+  }, [newMessages, messages]);
 
   const renderMessages = messages
     ? messages.map((m) => {
@@ -53,10 +77,25 @@ function MessageBox({ chatId, members }) {
       width="100%"
       height="100%"
       overflowY="auto"
-      justify={messages ? '' : 'center'}
-      align={messages ? '' : 'center'}
+      pos="relative"
     >
-      {messages ? renderMessages : <Spinner color="gray" size="xl" />}
+      {loading ? (
+        <Flex
+          m="0"
+          p="0"
+          zIndex="999"
+          pos="absolute"
+          bg="#0F0F0F"
+          h="99%"
+          w="100%"
+          justify="center"
+          align="center"
+        >
+          <Spinner />
+        </Flex>
+      ) : null}
+
+      {renderMessages}
       {thisNewMessages
         ? thisNewMessages.map((m) => (
             <Message

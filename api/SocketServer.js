@@ -2,14 +2,16 @@ let users = [];
 
 const SocketServer = (socket) => {
   socket.on('joinUser', (user) => {
-    users.push({ id: user._id, socketId: socket.id });
+    if (!users.find((u) => u.id === user._id)) {
+      users.push({ id: user._id, socketId: socket.id });
+    }
     console.log(users);
     socket.emit('getUsers', users);
   });
 
   socket.on('sendMessage', ({ receiverId, message }) => {
     const user = users.find((u) => u.id === receiverId);
-    socket.to(user.socketId).emit('getMessage', message);
+    if (user) socket.to(user.socketId).emit('getMessage', message);
   });
 
   socket.on('disconnect', () => {

@@ -13,6 +13,8 @@ import { FaPen } from 'react-icons/fa';
 import { BiGroup } from 'react-icons/bi';
 import { BiUser } from 'react-icons/bi';
 
+import ListLoading from '../Loading/ListLoading';
+
 import ContactList from './ContactList';
 import Search from './Search';
 
@@ -20,7 +22,7 @@ import { State } from '../../Context/Provider';
 import SearchResults from './SearchResults';
 
 function Sidebar() {
-  const { selectedChat, search, setSearch } = State();
+  const { contacts, selectedChat, search, setSearch } = State();
 
   return (
     <VStack
@@ -54,7 +56,13 @@ function Sidebar() {
         />
         <Search />
       </Flex>
-      {search ? <SearchResults /> : <ContactList />}
+      {search ? (
+        <SearchResults />
+      ) : contacts.length > 0 ? (
+        <ContactList />
+      ) : (
+        <ListLoading />
+      )}
       <Menu>
         <MenuButton
           _hover={{}}

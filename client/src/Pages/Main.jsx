@@ -5,36 +5,25 @@ import Chat from '../components/Chat/Chat';
 import { useContext, useEffect } from 'react';
 import { State } from '../Context/Provider';
 import { getChats } from '../services/chatServices';
-import { getMessages } from '../services/messageServices';
-
 import { SocketContext } from '../Context/SocketContext';
 
 function Main() {
   const socket = useContext(SocketContext);
 
-  const { user, messages, contacts, setMessages, setContacts } = State();
+  const { user, contacts, setContacts, setOnlineContacts } = State();
 
   useEffect(() => {
     socket.emit('joinUser', user);
     socket.on('getUsers', (users) => {
-      console.log(users);
+      setOnlineContacts(users);
     });
+    //eslint-disable-next-line
   }, [user]);
 
   useEffect(() => {
     const fetchContacts = async () => {
       try {
         const data = await getChats(user.token);
-
-        await data.map(async (c) => {
-          const d = await getMessages(user.token, c._id);
-          c.messages = d;
-          if (messages.length > 0) {
-            setMessages((prev) => [...prev, ...d]);
-          } else {
-            setMessages(d);
-          }
-        });
 
         setContacts(data);
       } catch (err) {

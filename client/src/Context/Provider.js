@@ -18,6 +18,7 @@ const Provider = ({ children }) => {
   const [query, setQuery] = useState('');
 
   const [contacts, setContacts] = useState([]);
+  const [onlineContacts, setOnlineContacts] = useState([]);
 
   const [messages, setMessages] = useState([]);
 
@@ -60,6 +61,9 @@ const Provider = ({ children }) => {
 
         socket,
         setSocket,
+
+        onlineContacts,
+        setOnlineContacts,
       }}
     >
       {children}

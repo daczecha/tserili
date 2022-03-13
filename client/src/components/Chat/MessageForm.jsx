@@ -10,11 +10,19 @@ import { useContext, useState } from 'react';
 import { sendMessage } from '../../services/messageServices';
 import { State } from '../../Context/Provider';
 import { SocketContext } from '../../Context/SocketContext';
+import { updateLatestMessage } from '../../helper_functions';
 
 function MessageForm({ chatId, members }) {
   const socket = useContext(SocketContext);
 
-  const { setMessages, user, newMessages, setNewMessages } = State();
+  const {
+    setMessages,
+    user,
+    newMessages,
+    setNewMessages,
+    contacts,
+    setContacts,
+  } = State();
   const [messageText, setMessageText] = useState('');
 
   const resizeTextarea = (e) => {
@@ -34,7 +42,16 @@ function MessageForm({ chatId, members }) {
 
     try {
       setNewMessages([...newMessages, { content: tempMessageContent, chatId }]);
+
+      setContacts(
+        updateLatestMessage(contacts, chatId, {
+          content: tempMessageContent,
+          chatId,
+        })
+      );
       const data = await sendMessage(user.token, tempMessageContent, chatId);
+
+      setContacts(updateLatestMessage(contacts, chatId, data));
 
       socket.emit('sendMessage', {
         receiverId,

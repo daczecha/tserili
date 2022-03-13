@@ -24,14 +24,8 @@ function Chat() {
           overflow="hidden"
         >
           <Header username={username} avatar={avatar} />
-          <MessageBox
-            chatId={selectedChat._id}
-            members={selectedChat.users}
-          />
-          <MessageForm
-            chatId={selectedChat._id}
-            members={selectedChat.users}
-          />
+          <MessageBox chatId={selectedChat._id} />
+          <MessageForm chatId={selectedChat._id} members={selectedChat.users} />
         </Box>
       ) : selectedLoadingChat ? (
         <Box

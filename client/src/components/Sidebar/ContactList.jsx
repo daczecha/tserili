@@ -1,20 +1,39 @@
 import { VStack } from '@chakra-ui/react';
-import { State } from '../../Context/Provider';
+import { useContext, useEffect } from 'react';
 
-import ListLoading from '../Loading/ListLoading';
+import { State } from '../../Context/Provider';
+import { SocketContext } from '../../Context/SocketContext';
 
 import Contact from './Contact';
+import { updateLatestMessage } from '../../helper_functions';
 
 function ContactList() {
-  const { contacts, selectedChat } = State();
+  const socket = useContext(SocketContext);
 
-  const renderContacts = contacts.map((c) => (
-    <Contact
-      key={c._id}
-      selected={c._id === selectedChat._id ? true : false}
-      data={c}
-    />
-  ));
+  const { contacts, selectedChat, setContacts } = State();
+
+  const renderContacts = contacts.map((c) => {
+    return (
+      <Contact
+        key={c._id}
+        selected={c._id === selectedChat._id ? true : false}
+        data={c}
+      />
+    );
+  });
+
+  useEffect(() => {
+    socket.on('getMessage', (data) => {
+      if (contacts.length) {
+        const chatId = data.conversation._id;
+        setContacts(updateLatestMessage(contacts, chatId, data));
+      } else {
+        console.log('no contacts');
+      }
+    });
+
+    //eslint-disable-next-line
+  }, []);
 
   return (
     <VStack
@@ -25,7 +44,7 @@ function ContactList() {
       overflowY="auto"
       align="stretch"
     >
-      {contacts.length > 0 ? renderContacts : <ListLoading />}
+      {renderContacts}
     </VStack>
   );
 }
