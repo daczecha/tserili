@@ -122,10 +122,25 @@ function AccountSettings({ isOpen, onClose }) {
             </AspectRatio>
             <Flex transform="translateY(-50%)" flexDirection={'column'}>
               <Box h="50px" p="10px 15px" m="20px 0" w="100%">
-                <Text fontSize="lg" color="white">
+                <Text
+                  fontSize="lg"
+                  color="white"
+                  textShadow=" rgba(0, 0, 0, 0.2) 0px 1px 4px"
+                  whiteSpace="nowrap"
+                  overflow="hidden"
+                  textOverflow="ellipsis"
+                  maxW="calc(100%)"
+                >
                   {user.username}
                 </Text>
-                <Text fontSize="sm" color="#493c89">
+                <Text
+                  fontSize="sm"
+                  color="#493c89"
+                  textShadow=" rgba(0, 0, 0, 0.2) 0px 1px 4px"
+                  whiteSpace="nowrap"
+                  overflow="hidden"
+                  textOverflow="ellipsis"
+                >
                   online
                 </Text>
               </Box>
@@ -166,7 +181,14 @@ function AccountSettings({ isOpen, onClose }) {
                       as={HiOutlineMail}
                     />
                     <Box alignSelf="flex-start">
-                      <Text color="#ccc" fontSize="md">
+                      <Text
+                        color="#ccc"
+                        fontSize="sm"
+                        whiteSpace="nowrap"
+                        overflow="hidden"
+                        textOverflow="ellipsis"
+                        w="240px"
+                      >
                         {user.email}
                       </Text>
                       <Text color="#aaa" fontSize="xs">

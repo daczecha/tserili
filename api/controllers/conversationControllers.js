@@ -4,7 +4,7 @@ const Message = require('../models/Message');
 const User = require('../models/User');
 const Conversation = require('../models/Conversation');
 
-const acessConversation = expressAsyncHandler(async (req, res) => {
+const accessConversation = expressAsyncHandler(async (req, res) => {
   const { userId } = req.body;
 
   if (!userId) {
@@ -35,6 +35,14 @@ const acessConversation = expressAsyncHandler(async (req, res) => {
       _id: createdConvo._id,
     }).populate('users', '-password');
 
+    await User.findByIdAndUpdate(req.user.id, {
+      $push: { contacts: userId },
+    });
+
+    await User.findByIdAndUpdate(userId, {
+      $push: { contacts: req.user.id },
+    });
+
     res.status(200).json(newConvo);
   } catch (error) {
     res.status(400);
@@ -57,4 +65,4 @@ const getConversations = expressAsyncHandler(async (req, res) => {
   res.send(convos);
 });
 
-module.exports = { acessConversation, getConversations };
+module.exports = { accessConversation, getConversations };

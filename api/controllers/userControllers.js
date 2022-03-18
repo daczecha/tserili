@@ -14,6 +14,7 @@ const getUser = expressAsyncHandler(async (req, res) => {
 
   const users = await User.find(keyword)
     .find({ _id: { $ne: req.user._id } })
+    .populate('contacts', '-password')
     .select('-password -confirmed');
   res.status(200).send(users);
 });

@@ -1,4 +1,4 @@
-import { Flex, Spinner, VStack } from '@chakra-ui/react';
+import { Badge, Flex, Heading, Spinner, VStack } from '@chakra-ui/react';
 import axios from 'axios';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { State } from '../../Context/Provider';
@@ -8,7 +8,7 @@ import { getMessages } from '../../services/messageServices';
 
 import Message from './Message';
 
-function MessageBox({ chatId }) {
+function MessageBox({ chatId, contactName }) {
   const socket = useContext(SocketContext);
   const { user, messages, newMessages, setMessages } = State();
 
@@ -94,7 +94,26 @@ function MessageBox({ chatId }) {
         </Flex>
       ) : null}
 
-      {renderMessages}
+      {!renderMessages.length && !thisNewMessages.length && !loading ? (
+        <Flex
+          m="0"
+          p="0"
+          zIndex="999"
+          pos="absolute"
+          bg="#0F0F0F"
+          h="99%"
+          w="100%"
+          justify="center"
+          align="center"
+        >
+          <Badge borderRadius="5px" p="5px" bg="#222" color="white">
+            Send you first message to {contactName}
+          </Badge>
+        </Flex>
+      ) : (
+        renderMessages
+      )}
+
       {thisNewMessages
         ? thisNewMessages.map((m) => (
             <Message

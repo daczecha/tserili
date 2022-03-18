@@ -11,7 +11,7 @@ import {
 import React from 'react';
 import { State } from '../../Context/Provider';
 
-function Contact({ selected, data, sent, online }) {
+function Contact({ selected, data, online }) {
   const bgColor = selected ? '#7C6BCC' : '#212121';
   const hoverColor = selected ? '#7C6BCC' : '#2b2b2b';
 
@@ -49,11 +49,11 @@ function Contact({ selected, data, sent, online }) {
         background: hoverColor,
       }}
       h="80px"
-      bg={bgColor}
       color="white"
+      bg={bgColor}
       borderRadius="14px"
     >
-      <HStack alignItems="center" w="100%" h="100%" p="10px">
+      <HStack alignItems="center" h="100%" w="100%" p="10px">
         <Avatar size="md" name={username} src={avatar}>
           <AvatarBadge
             borderColor={bgColor}
@@ -61,9 +61,16 @@ function Contact({ selected, data, sent, online }) {
             bg={selected ? 'white' : 'green.500'}
           />
         </Avatar>
-        <Box p="2px" w="100%">
+        <Box p="2px" flexGrow="1" w="80%">
           <Flex justifyContent="space-between" alignItems="center">
-            <Heading fontSize="md" font="bold">
+            <Heading
+              fontSize="md"
+              font="bold"
+              whiteSpace="nowrap"
+              overflow="hidden"
+              textOverflow="ellipsis"
+              w="90%"
+            >
               {username}
             </Heading>
             <Text fontSize="sm" color={selected ? 'white' : 'gray'}>
@@ -71,12 +78,15 @@ function Contact({ selected, data, sent, online }) {
             </Text>
           </Flex>
           <Flex justifyContent="space-between" alignItems="center">
-            <Text fontSize="md" color={selected ? 'white' : 'gray'}>
-              {data.latestMessage
-                ? data.latestMessage.content.length > 10
-                  ? data.latestMessage.content.substring(0, 10) + '...'
-                  : data.latestMessage.content
-                : ''}
+            <Text
+              fontSize="md"
+              color={selected ? 'white' : 'gray'}
+              whiteSpace="nowrap"
+              overflow="hidden"
+              textOverflow="ellipsis"
+              w="90%"
+            >
+              {data.latestMessage && data.latestMessage.content}
             </Text>
             <span style={notificationBadgeCSS}>
               <span style={notificationNumberCSS}>{1}</span>

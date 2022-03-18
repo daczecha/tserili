@@ -31,6 +31,7 @@ const userSchema = mongoose.Schema(
       minlength: 6,
       required: true,
     },
+    contacts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     avatar: {
       type: String,
       default: '',

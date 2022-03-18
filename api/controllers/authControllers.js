@@ -5,7 +5,10 @@ const expressAsyncHandler = require('express-async-handler');
 const generateToken = require('../config/generateToken');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
+
 const User = require('../models/User');
+const Conversation = require('../models/Conversation');
+const Message = require('../models/Message');
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -90,6 +93,37 @@ const emailConfirmation = expressAsyncHandler(async (req, res) => {
   if (hasConfirmed)
     return res.redirect('http://localhost:3000/heZio6J2uPFuCTZvpfEH');
 
+  if (id !== process.env.TSERILI_ID) {
+    //Add Tserili Conversation
+    const createdConvo = await Conversation.create({
+      users: [process.env.TSERILI_ID, id],
+    });
+
+    await User.findByIdAndUpdate(id, {
+      $push: { contacts: process.env.TSERILI_ID },
+    });
+
+    //Send message to user
+
+    const welcomeText = 'Hello this is Tserili';
+
+    var messageData = {
+      sender: process.env.TSERILI_ID,
+      content: welcomeText,
+      conversation: createdConvo._id,
+    };
+
+    let message = await Message.create(messageData);
+
+    message = await message.populate('sender', 'username avatar');
+    message = await message.populate('conversation');
+
+    await Conversation.findByIdAndUpdate(createdConvo._id, {
+      latestMessage: message,
+    });
+  }
+
+  // confirm and send response
   await User.findByIdAndUpdate(id, { confirmed: true });
   res.redirect('http://localhost:3000/60EOGThYDupS2FEwd8NB');
 });
