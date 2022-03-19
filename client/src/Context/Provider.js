@@ -21,8 +21,6 @@ const Provider = ({ children }) => {
 
   const [newMessages, setNewMessages] = useState([]);
 
-  const [socket, setSocket] = useState(null);
-
   return (
     <Context.Provider
       value={{
@@ -52,9 +50,6 @@ const Provider = ({ children }) => {
 
         newMessages,
         setNewMessages,
-
-        socket,
-        setSocket,
 
         onlineContacts,
         setOnlineContacts,

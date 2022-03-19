@@ -65,4 +65,21 @@ const getConversations = expressAsyncHandler(async (req, res) => {
   res.send(convos);
 });
 
-module.exports = { accessConversation, getConversations };
+const deleteConversation = expressAsyncHandler(async (req, res) => {
+  const { conversationId } = req.params;
+
+  if (!conversationId) {
+    console.log('Bad request');
+    return res.sendStatus(400);
+  }
+
+  try {
+    await Conversation.findByIdAndDelete(conversationId);
+  } catch (error) {
+    res.status(400);
+    throw new Error(error.message);
+  }
+  res.sendStatus(200);
+});
+
+module.exports = { accessConversation, getConversations, deleteConversation };

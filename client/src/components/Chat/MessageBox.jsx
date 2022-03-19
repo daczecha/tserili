@@ -1,4 +1,4 @@
-import { Badge, Flex, Heading, Spinner, VStack } from '@chakra-ui/react';
+import { Badge, Flex, Spinner, VStack } from '@chakra-ui/react';
 import axios from 'axios';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { State } from '../../Context/Provider';
@@ -21,7 +21,6 @@ function MessageBox({ chatId, contactName }) {
   useEffect(() => {
     socket.on('getMessage', (data) => {
       setMessages((prev) => [...prev, data]);
-      //update latest message
     });
 
     //eslint-disable-next-line
@@ -82,13 +81,13 @@ function MessageBox({ chatId, contactName }) {
         <Flex
           m="0"
           p="0"
-          zIndex="999"
           pos="absolute"
           bg="#0F0F0F"
           h="99%"
           w="100%"
           justify="center"
           align="center"
+          zIndex={'999'}
         >
           <Spinner />
         </Flex>
@@ -98,7 +97,6 @@ function MessageBox({ chatId, contactName }) {
         <Flex
           m="0"
           p="0"
-          zIndex="999"
           pos="absolute"
           bg="#0F0F0F"
           h="99%"

@@ -22,10 +22,33 @@ import Search from './Search';
 import { State } from '../../Context/Provider';
 import SearchResults from './SearchResults';
 import AccountSettings from './AccountSettings';
+import { useEffect, useState } from 'react';
+import { getChats } from '../../services/chatServices';
 
 function Sidebar() {
-  const { contacts, selectedChat, search, setSearch } = State();
+  const { user, setContacts, contacts, selectedChat, search, setSearch } =
+    State();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [loading, setloading] = useState(false);
+
+  useEffect(() => {
+    const fetchContacts = async () => {
+      setloading(true);
+      try {
+        const data = await getChats(user.token);
+        setContacts(data);
+        setloading(false);
+      } catch (err) {
+        console.log(err);
+        setloading(false);
+      }
+    };
+
+    if (!contacts.length) fetchContacts();
+    //eslint-disable-next-line
+  }, []);
 
   return (
     <VStack
@@ -65,9 +88,9 @@ function Sidebar() {
         <SearchResults />
       ) : contacts.length > 0 ? (
         <ContactList />
-      ) : (
+      ) : loading ? (
         <ListLoading />
-      )}
+      ) : null}
       <Menu>
         <MenuButton
           _hover={{}}

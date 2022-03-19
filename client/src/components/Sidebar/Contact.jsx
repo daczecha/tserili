@@ -86,7 +86,11 @@ function Contact({ selected, data, online }) {
               textOverflow="ellipsis"
               w="90%"
             >
-              {data.latestMessage && data.latestMessage.content}
+              {data.latestMessage ? (
+                data.latestMessage.content
+              ) : (
+                <em>Send your first message</em>
+              )}
             </Text>
             <span style={notificationBadgeCSS}>
               <span style={notificationNumberCSS}>{1}</span>

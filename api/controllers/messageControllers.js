@@ -46,5 +46,21 @@ const getMessages = expressAsyncHandler(async (req, res) => {
     throw new Error(error.message);
   }
 });
+const clearHistory = expressAsyncHandler(async (req, res) => {
+  const { conversation } = req.params;
 
-module.exports = { getMessages, sendMessage };
+  if (!conversation) {
+    console.log('Bad request');
+    return res.sendStatus(400);
+  }
+
+  try {
+    await Message.deleteMany({ conversation });
+  } catch (error) {
+    res.status(400);
+    throw new Error(error.message);
+  }
+  res.sendStatus(200);
+});
+
+module.exports = { getMessages, sendMessage, clearHistory };

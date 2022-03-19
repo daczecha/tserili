@@ -12,6 +12,13 @@ const accessChat = async (token, userId) => {
   return data;
 };
 
+const deleteChat = async (token, chatId) => {
+  const { data } = await axios.delete(`${baseURL}/${chatId}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return data;
+};
+
 const getChats = async (token) => {
   const { data } = await axios.get(baseURL, {
     headers: { Authorization: `Bearer ${token}` },
@@ -19,4 +26,4 @@ const getChats = async (token) => {
   return data;
 };
 
-export { accessChat, getChats };
+export { accessChat, getChats, deleteChat };

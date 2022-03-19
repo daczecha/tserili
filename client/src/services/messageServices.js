@@ -9,6 +9,13 @@ const getMessages = async (token, chatId, cancelTokenSource) => {
   return data;
 };
 
+const clearHistory = async (token, chatId) => {
+  const { data } = await axios.delete(`${baseURL}/${chatId}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return data;
+};
+
 const sendMessage = async (token, content, chatId) => {
   const { data } = await axios.post(
     baseURL,
@@ -20,4 +27,4 @@ const sendMessage = async (token, content, chatId) => {
   return data;
 };
 
-export { getMessages, sendMessage };
+export { getMessages, sendMessage, clearHistory };

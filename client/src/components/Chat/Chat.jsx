@@ -6,7 +6,7 @@ import MessageForm from './MessageForm';
 import { State } from '../../Context/Provider';
 
 function Chat() {
-  const { user, selectedChat, selectedLoadingChat } = State();
+  const { user, selectedChat } = State();
 
   const { username, avatar } = selectedChat
     ? selectedChat.users.find((u) => u._id !== user._id)
@@ -31,22 +31,6 @@ function Chat() {
             }
           />
           <MessageForm chatId={selectedChat._id} members={selectedChat.users} />
-        </Box>
-      ) : selectedLoadingChat ? (
-        <Box
-          d={{ base: selectedChat ? 'flex' : 'none', md: 'flex' }}
-          h="100%"
-          flex="7"
-          bg="#0f0f0f"
-          flexDir="column"
-          overflow="hidden"
-        >
-          <Header
-            username={selectedLoadingChat.username}
-            avatar={selectedLoadingChat.avatar}
-          />
-          <MessageBox />
-          <MessageForm />
         </Box>
       ) : (
         <Flex

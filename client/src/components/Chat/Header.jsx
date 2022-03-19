@@ -7,13 +7,83 @@ import {
   Box,
   IconButton,
   useBreakpointValue,
+  useToast,
 } from '@chakra-ui/react';
 
-import { FaEllipsisV } from 'react-icons/fa';
+import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
+
+import { FaEllipsisV, FaTrashAlt } from 'react-icons/fa';
+import { GiBroom } from 'react-icons/gi';
+import { BsFillPersonFill } from 'react-icons/bs';
+
 import { State } from '../../Context/Provider';
+import { updateLatestMessage } from '../../helper_functions';
+import { clearHistory } from '../../services/messageServices';
+import { deleteChat } from '../../services/chatServices';
 
 function Header({ username, avatar }) {
-  const { setSelectedChat } = State();
+  const {
+    user,
+    contacts,
+    setContacts,
+    setMessages,
+    setSelectedChat,
+    selectedChat,
+  } = State();
+
+  const toast = useToast();
+
+  const handleViewProfile = () => {};
+
+  const handleClearHistory = async () => {
+    try {
+      toast({
+        position: 'bottom',
+        render: () => (
+          <Box
+            color="white"
+            textAlign="center"
+            borderRadius="lg"
+            p={3}
+            bg="#222"
+          >
+            Cleared Chat History
+          </Box>
+        ),
+        duration: 1000,
+      });
+      setMessages([]);
+      updateLatestMessage(contacts, selectedChat._id, '');
+      await clearHistory(user.token, selectedChat._id);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleDeleteChat = async () => {
+    try {
+      toast({
+        position: 'bottom',
+        render: () => (
+          <Box
+            color="white"
+            textAlign="center"
+            borderRadius="lg"
+            p={3}
+            bg="#222"
+          >
+            Deleted Chat
+          </Box>
+        ),
+        duration: 1000,
+      });
+      setContacts(contacts.filter((c) => c._id !== selectedChat._id));
+      setSelectedChat('');
+      await deleteChat(user.token, selectedChat._id);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <Flex
@@ -72,16 +142,63 @@ function Header({ username, avatar }) {
           icon={<SearchIcon color="#ccc" fontSize="18px" />}
         />
 
-        <IconButton
-          _hover={{
-            background: '#333',
-          }}
-          _focus={{}}
-          mr="5px"
-          borderRadius="50%"
-          bg="transparent"
-          icon={<Icon as={FaEllipsisV} color="#ccc" fontSize="18px" />}
-        />
+        <Menu>
+          <MenuButton
+            _hover={{
+              background: '#333',
+            }}
+            _focus={{}}
+            _active={{}}
+            border="none"
+            as={IconButton}
+            aria-label="Options"
+            variant="outline"
+            color="white"
+            mr="2px"
+            borderRadius="50%"
+            bg="transparent"
+            icon={<Icon as={FaEllipsisV} color="#ccc" fontSize="18px" />}
+          />
+          <MenuList
+            boxShadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
+            border="none"
+            bg="#222"
+            color="white"
+          >
+            <MenuItem
+              onClick={handleViewProfile}
+              _focus={{}}
+              _active={{}}
+              _hover={{ background: '#333' }}
+              fontSize="md"
+              icon={<Icon as={BsFillPersonFill} color="#ccc" fontSize="22px" />}
+            >
+              View Profile
+            </MenuItem>
+
+            <MenuItem
+              onClick={handleClearHistory}
+              _focus={{}}
+              _active={{}}
+              _hover={{ background: '#333' }}
+              fontSize="md"
+              icon={<Icon as={GiBroom} color="#ccc" fontSize="22px" />}
+            >
+              Clear History
+            </MenuItem>
+
+            <MenuItem
+              onClick={handleDeleteChat}
+              _focus={{}}
+              _active={{}}
+              _hover={{ background: '#333' }}
+              fontSize="md"
+              icon={<Icon as={FaTrashAlt} color="#ccc" fontSize="18px" />}
+            >
+              Delete Chat
+            </MenuItem>
+          </MenuList>
+        </Menu>
       </Box>
     </Flex>
   );
